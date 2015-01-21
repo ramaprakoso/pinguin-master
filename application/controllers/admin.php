@@ -4,8 +4,8 @@ class Admin extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->library(array('form_validation','session'));
-			$this->load->model('db_forum');		
-	}
+			$this->load->model('db_admin'); 		
+	}	
 
 	function index(){
 		//if($this->session->userdata('level')=='admin'){
@@ -20,7 +20,7 @@ class Admin extends CI_Controller {
 		*/
 	}
 	function m_forum(){
-		$data['get']=$this->db_forum->m_forum(); 
+		$data['get']=$this->db_admin->m_forum(); 
 		$this->load->view('admin/header'); 
 		$this->load->view('admin/side_menu');
 		$this->load->view('admin/m_forum',$data);
@@ -35,15 +35,23 @@ class Admin extends CI_Controller {
 	}
 	function add_forum_action(){
 		$name=$this->input->post('forum_name'); 
-		$insert=$this->db_forum->add_forum($name); 
+		$insert=$this->db_admin->add_forum($name); 
 			redirect('admin/m_forum'); 
 	}
 	function add_category(){
-		$data['forum']=$this->db_forum->get_forum(); 
+		$data['getforum']=$this->db_admin->getforum(); 
 		$this->load->view('admin/header'); 
 		$this->load->view('admin/side_menu');
 		$this->load->view('admin/add_category',$data);
 		$this->load->view('admin/footer'); 	
+	}
+	function add_sub(){
+		$data['getforum']=$this->db_admin->getforum(); 
+		$data['getcategory']=$this->db_admin->getcategory(); 	
+		$this->load->view('admin/header');
+		$this->load->view('admin/side_menu');
+		$this->load->view('admin/add_sub',$data);
+		$this->load->view('admin/footer'); 	 
 	}
 	function add_category_action(){
 		$data=array(
@@ -51,10 +59,18 @@ class Admin extends CI_Controller {
 				'category_desc' => $this->input->post('category'), 
 				'forum_id' => $this->input->post('parent')
 			); 
-		$this->db_forum->add_category_forum($data); 
+		$this->db_admin->add_category_forum($data); 
 		redirect('admin/m_forum'); 
 	}
+	function edit_forum(){
 
+	}
+	function get_forum(){
+		$data['getforum']=$this->db_forum->getforum(); 
+	}	
+	function get_category(){
+		$data['getcategory']=$this->db_forum->getcategory(); 
+	}
 	function m_permis(){
 	/*
 		$this->load->view('admin/header'); 
